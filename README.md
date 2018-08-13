@@ -1,4 +1,4 @@
-## Aplicacion de express http node js
+## Aplicacion RestServer node js
 
 Este es el ejercicio del curso
 
