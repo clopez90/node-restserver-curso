@@ -1,10 +1,49 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
-const Usuario = require('../model/usuario')
+const Usuario = require('../model/usuario');
+const _ = require('underscore');
 
+
+// GET LIST
 app.get('/usuario', function(req, res) {
-    res.json('get Usuario');
+
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
+
+    // Podemos indicarle solo los campos que queremos mandar al usuario
+    // {estado = true} para traer solo usuarios activos
+    Usuario.find({ estado: true }, 'nombre email role estado google img')
+        .skip(desde)
+        .limit(limite)
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            //{estado = true} para contar solo usuarios activos
+            Usuario.count({ estado: true }, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    usuarios,
+                    registros: conteo
+                });
+            });
+
+
+
+
+        });
+
+
+
+
+
 });
 
 //POST
@@ -34,16 +73,52 @@ app.post('/usuario', function(req, res) {
     });
 
 });
+
+
+//PUT
 app.put('/usuario/:id', function(req, res) {
 
     let id = req.params.id;
+    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
-    res.json({
-        id
+    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            usuario: usuarioDB
+        });
+
     });
+
 });
-app.delete('/usuario', function(req, res) {
-    res.json('delete Usuario');
+
+//DELETE
+app.delete('/usuario/:id', function(req, res) {
+
+    let id = req.params.id;
+
+    // Usuario.findByIdAndRemove(id, (err, usuarioBorrado)=>{}); --Instruccion para el borrado fisico.
+    //Desactivamos el usuario a través del campo estado, no lo eliminamos fisicamente
+    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true }, (err, usuarioDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            usuario: usuarioDB
+        });
+
+    });
+
 });
 
 
