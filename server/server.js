@@ -14,8 +14,9 @@ app.use(bodyParser.json());
 
 /**
  * Le decimos a express que vamos a usar los endpoints que hay en este fichero 
+ * Index.js tiene el mapeo de todos los ficheros con endpoints
  */
-app.use(require('./routes/usuario.js'))
+app.use(require('./routes/index'));
 
 /**
  * Conectamos con la base de datos MongoDB
