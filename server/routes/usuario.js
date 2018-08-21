@@ -68,7 +68,7 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
             });
         }
 
-        res.json({
+        res.status(201).json({
             usuario: usuarioDB
         });
     });

@@ -11,7 +11,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 /**
  * JWT - CONFIG
  */
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+process.env.CADUCIDAD_TOKEN = '48h';
 process.env.SEED = process.env.SEED || 'este-es-el-seed-desarrollo';
 
 /**
