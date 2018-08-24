@@ -4,8 +4,6 @@ let app = express();
 const Producto = require('../model/producto');
 const _ = require('underscore');
 
-
-
 /**
  *  Muestra el producto por id
  */
