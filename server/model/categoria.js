@@ -14,7 +14,7 @@ let categoriaSchema = new Schema({
     }
 });
 
-console.log('test');
+console.log('111111');
 
 categoriaSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' });
 
